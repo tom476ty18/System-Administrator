@@ -95,16 +95,16 @@ User Accounts:
 
 Create accounts with sudo permissions.
 Commands:
-useradd -m -G wheel trung
-passwd trung
-echo "trung ALL=(ALL) ALL" >> /etc/sudoers
-useradd -m -G wheel GitTD2019$20#21
-passwd GitTD2019$20#21
-echo "GitTD2019$20#21 ALL=(ALL) ALL" >> /etc/sudoers
+useradd -m -G wheel justin
+passwd justin
+echo "justin ALL=(ALL) ALL" >> /etc/sudoers
+useradd -m -G wheel codi
+passwd codi
+echo "codi ALL=(ALL) ALL" >> /etc/sudoers
 
 Set GraceHopper1906 as the password for instructor accounts and configure password change on login:
-passwd -e trung
-passwd -e GitTD2019$20#21
+passwd -e justin
+passwd -e codi
 
 
 Desktop Environment (DE):
@@ -119,8 +119,8 @@ Change Default Shell:
 Install and set zsh as the default shell for the users.
 Commands:
 pacman -S zsh
-chsh -s /usr/bin/zsh trung
-chsh -s /usr/bin/zsh GitTD2019$20#21
+chsh -s /usr/bin/zsh justin
+chsh -s /usr/bin/zsh codi
 
 SSH Installation:
 
