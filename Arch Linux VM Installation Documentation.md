@@ -4,7 +4,7 @@ Introduction:
 This documentation outlines the steps taken to install Arch Linux on a virtual machine (VM), along with additional modifications specified in the assignment. This is not a reproduction of the Arch Wiki but a personalized guide to recreate this customized Arch Linux VM.
 
 1. Setting Up the VM Environment
-Virtualization Software: VMware/VirtualBox (your choice)
+Virtualization Software: VMware/VirtualBox (my choice)
 Configure the VM with recommended resources: 2 GB RAM, 20 GB Disk, 1 CPU.
 Command: No specific commands here, but make sure your VM settings align with these requirements for a smoother installation.
 
