@@ -19,7 +19,7 @@ Use cfdisk or fdisk to create partitions. Recommended layout:
 /boot (512MB, FAT32)
 Root partition / (remaining space)
 
-Commands:
+** Commands: **
 cfdisk /dev/sda
 mkfs.fat -F32 /dev/sda1   # Boot partition
 mkfs.ext4 /dev/sda2       # Root partition
@@ -27,7 +27,7 @@ mkfs.ext4 /dev/sda2       # Root partition
 # 4. Mounting Partitions
 Mount the root and boot partitions.
 
-Commands:
+** Commands: **
 mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
