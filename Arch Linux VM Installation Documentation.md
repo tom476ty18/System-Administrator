@@ -1,7 +1,7 @@
 # Arch Linux VM Installation Documentation:
 
 # Introduction:
-This documentation outlines the steps taken to install Arch Linux on a virtual machine (VM), along with additional modifications specified in the assignment. This is not a reproduction of the Arch Wiki but a personalized guide to recreate this customized Arch Linux VM.
+This documentation outlines the steps taken to install Arch Linux on a virtual machine (VM), along with additional modifications specified in the assignment. This is not a reproduction of the Arch Wiki but a personalized guide that I used to recreate this customized Arch Linux VM.
 
 # 1. Setting Up the VM Environment
 Virtualization Software: VMware/VirtualBox (my choice)
