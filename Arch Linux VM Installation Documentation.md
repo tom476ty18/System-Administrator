@@ -10,7 +10,7 @@ Command: No specific commands here, but make sure your VM settings align with th
 
 # 2. Booting the Arch ISO
 Boot Mode: Ensure the VM boots in UEFI mode.
-Command: ls /sys/firmware/efi/efivars
+Command: > ls /sys/firmware/efi/efivars
 This checks if the system has booted in UEFI mode. If no files are shown, the VM may be in legacy mode.
 
 # 3. Preparing the Disk
@@ -19,15 +19,15 @@ Use cfdisk or fdisk to create partitions. Recommended layout:
 /boot (512MB, FAT32)
 Root partition / (remaining space)
 
-** Commands: **
-cfdisk /dev/sda
-mkfs.fat -F32 /dev/sda1   # Boot partition
-mkfs.ext4 /dev/sda2       # Root partition
+Commands:
+> cfdisk /dev/sda
+> mkfs.fat -F32 /dev/sda1   # Boot partition
+> mkfs.ext4 /dev/sda2       # Root partition
 
 # 4. Mounting Partitions
 Mount the root and boot partitions.
 
-** Commands: **
+Commands:
 mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
