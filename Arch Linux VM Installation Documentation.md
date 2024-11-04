@@ -5,7 +5,7 @@ This documentation outlines the steps taken to install Arch Linux on a virtual m
 
 # 1. Setting Up the VM Environment
 Virtualization Software: VMware/VirtualBox (my choice)
-Configure the VM with recommended resources: 2 GB RAM, 20 GB Disk, 1 CPU.
+Configure the VM with recommended resources: 2 GB RAM, 20 GB Disk, 2 CPU cores.
 Command: No specific commands here, but make sure your VM settings align with these requirements for a smoother installation.
 
 # 2. Booting the Arch ISO
