@@ -1,0 +1,155 @@
+# Cloud Wireguard VPN using Docker
+
+This guide provides step-by-step instructions for setting up a Wireguard VPN server on a DigitalOcean droplet using Docker and Docker Compose. The steps are designed to ensure that you can replicate the setup and document your progress for submission.
+
+---
+
+## Prerequisites
+
+- A credit card for DigitalOcean registration (no charges during the trial if you delete your droplet).
+- Basic familiarity with Linux terminal commands.
+- A GitHub Pages account to publish your documentation.
+
+---
+
+## Steps to Complete the Assignment
+
+### 1. Create a DigitalOcean Account
+
+1. **Sign up** for a DigitalOcean account using [this referral link](https://m.do.co/c/d33d59113ab6) to receive $200 in free credits for 60 days.
+2. **Verify your account** by adding a credit card (you won't be charged if you delete your droplet after the trial).
+
+---
+
+### 2. Create an Ubuntu Droplet
+
+1. Log in to your DigitalOcean account.
+2. Create a droplet with the following specifications:
+   - **Image**: Ubuntu 22.04 or 24.04.
+   - **Plan**: Basic Regular Intel CPU ($6/month option).
+   - **Authentication**: Use either SSH key (recommended) or a password (less secure).
+   - **Data Center Region**: Choose your preferred region.
+3. **Access the droplet** via SSH or the DigitalOcean console.
+   ```bash
+   ssh root@<droplet-ip>
+   ```
+
+---
+
+### 3. Install Docker
+
+1. **Update the system**:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
+2. **Install Docker**:
+   ```bash
+   sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt update
+   sudo apt install -y docker-ce docker-ce-cli containerd.io
+   ```
+3. **Verify Docker installation**:
+   ```bash
+   docker --version
+   ```
+
+---
+
+### 4. Install Wireguard Using Docker Compose
+
+1. **Install Docker Compose**:
+   ```bash
+   sudo apt install -y docker-compose-plugin
+   ```
+2. **Create a project directory**:
+   ```bash
+   mkdir wireguard && cd wireguard
+   ```
+3. **Create a `docker-compose.yml` file**:
+   ```yaml
+   version: '3.8'
+   services:
+     wireguard:
+       image: linuxserver/wireguard
+       container_name: wireguard
+       cap_add:
+         - NET_ADMIN
+         - SYS_MODULE
+       environment:
+         - PUID=1000
+         - PGID=1000
+         - TZ=Etc/UTC
+         - SERVERURL=<YOUR_SERVER_IP>
+         - SERVERPORT=51820
+         - PEERS=2
+         - PEERDNS=8.8.8.8
+         - INTERNAL_SUBNET=10.13.13.0
+       volumes:
+         - ./config:/config
+       ports:
+         - 51820:51820/udp
+       sysctls:
+         - net.ipv4.conf.all.src_valid_mark=1
+       restart: unless-stopped
+   ```
+4. **Start Wireguard**:
+   ```bash
+   docker-compose up -d
+   ```
+
+---
+
+### 5. Connect Devices to the Wireguard Server
+
+#### a. Mobile Device
+
+1. Install the Wireguard app from your device's app store.
+2. Use the QR code generated in the Wireguard configuration to set up the VPN.
+3. **Test the VPN**:
+   - Before enabling the VPN, check your public IP:
+     ```bash
+     curl ifconfig.me
+     ```
+   - Visit [IPLeak.net](https://ipleak.net/) and take a screenshot of your current IP.
+   - Enable the Wireguard VPN and revisit [IPLeak.net](https://ipleak.net/).
+   - Capture a screenshot showing the VPN's IP address.
+
+#### b. Laptop
+
+1. Locate the `.conf` file in the Wireguard configuration directory (`~/wireguard/configs/{username}`).
+2. Download or copy the `.conf` file to your laptop.
+3. Import the file into your Wireguard client.
+4. Repeat the steps above to test the VPN connection.
+
+---
+
+### 6. Document and Publish
+
+1. Create a GitHub Page for your project.
+2. Include the following:
+   - Step-by-step instructions.
+   - Commands and their explanations.
+   - Screenshots of the public IP before and after connecting to the VPN.
+   - The `docker-compose.yml` file used.
+3. Publish the documentation and submit the link as per your course requirements.
+
+---
+
+### 7. Clean Up
+
+1. **Destroy your droplet** before the 60-day trial ends to avoid charges:
+   - Log in to DigitalOcean.
+   - Navigate to your droplets list.
+   - Select your droplet and click **Destroy**.
+2. Note: Simply turning off the droplet does not stop charges.
+
+---
+
+## Notes
+
+- **Security**: Ensure proper security practices (e.g., HTTPS, port restrictions) if deploying in a production environment.
+- **Customization**: Modify the `docker-compose.yml` file to adjust settings such as the number of peers or port numbers.
+
+---
