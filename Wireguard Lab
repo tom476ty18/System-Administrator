@@ -1,0 +1,137 @@
+# Cloud Wireguard VPN using Docker
+
+This guide provides step-by-step instructions to set up a Wireguard VPN server on a DigitalOcean Ubuntu droplet using Docker. The instructions are self-contained, so readers can follow without needing to visit external links.
+
+---
+
+## Prerequisites
+
+- A DigitalOcean account.
+- Basic familiarity with Linux terminal commands.
+- A local SSH client for accessing the droplet.
+
+---
+
+## Steps to Install and Configure Wireguard VPN
+
+### 1. Create a DigitalOcean Account
+
+1. Sign up for a **new** DigitalOcean account using [this referral link](https://m.do.co/c/d33d59113ab6) to receive $200 credit for 2 months.
+   - If you already have an account:
+     - Create a new account using a different email address, OR
+     - Delete your existing account and re-sign up using the referral link.
+
+---
+
+### 2. Create an Ubuntu Droplet
+
+1. Log in to DigitalOcean.
+2. Create a droplet with the following configuration:
+   - **Image**: Ubuntu 22.04 or 24.04.
+   - **Plan**: Basic Regular Intel CPU.
+   - **Cost**: $6/month (2nd cheapest option).
+   - **Storage**: Normal SSD.
+   - **Authentication**: Use either SSH key (recommended) or password (less secure).
+   - **Data Center Region**: Choose your preferred region.
+   - **Optional Add-ons**: No need to select any.
+
+---
+
+### 3. Install Docker
+
+1. Access the droplet using SSH or the DigitalOcean console.
+   - SSH example:
+     ```bash
+     ssh root@<droplet-ip>
+     ```
+2. Update your system:
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
+3. Install Docker by following these commands:
+   ```bash
+   sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt update
+   sudo apt install -y docker-ce docker-ce-cli containerd.io
+   ```
+4. Verify Docker installation:
+   ```bash
+   docker --version
+   ```
+
+---
+
+### 4. Install Wireguard Using Docker Compose
+
+1. Install Docker Compose:
+   ```bash
+   sudo apt install -y docker-compose-plugin
+   ```
+2. Create a `docker-compose.yml` file for Wireguard:
+   ```yaml
+   version: '3.8'
+   services:
+     wireguard:
+       image: linuxserver/wireguard
+       container_name: wireguard
+       cap_add:
+         - NET_ADMIN
+         - SYS_MODULE
+       environment:
+         - PUID=1000
+         - PGID=1000
+         - TZ=Etc/UTC
+         - SERVERURL=<YOUR_SERVER_IP>
+         - SERVERPORT=51820
+         - PEERS=1
+         - PEERDNS=8.8.8.8
+         - INTERNAL_SUBNET=10.13.13.0
+       volumes:
+         - ./config:/config
+       ports:
+         - 51820:51820/udp
+       sysctls:
+         - net.ipv4.conf.all.src_valid_mark=1
+       restart: unless-stopped
+   ```
+3. Start Wireguard:
+   ```bash
+   docker-compose up -d
+   ```
+
+---
+
+### 5. Test Your VPN Connection
+
+#### a. On a Mobile Device
+
+1. Use the QR code generated in the Wireguard configuration for mobile setup.
+2. Before enabling the VPN, check your local IP address:
+   ```bash
+   curl ifconfig.me
+   ```
+3. Visit [IPLeak.net](https://ipleak.net/) and capture a screenshot of your local IP.
+4. Turn on the Wireguard VPN tunnel and revisit [IPLeak.net](https://ipleak.net/).
+5. Capture a screenshot showing your VPN tunnel is active.
+
+#### b. On a Laptop
+
+1. Locate the `.conf` file in the Wireguard configuration directory (`~/wireguard/configs/{username}`).
+2. Download or copy the `.conf` file to your laptop.
+3. Import the file into your Wireguard client.
+4. Repeat the steps above to test the VPN connection.
+
+---
+
+## Deliverables
+
+1. **GitHub Page Documentation**:
+   - Include all steps, commands, and explanations.
+   - Ensure instructions are standalone and complete.
+2. **Screenshots**:
+   - Screenshot of the running Wireguard server.
+   - Screenshots from IPLeak.net showing the active VPN connection on both mobile and laptop.
+
+---
